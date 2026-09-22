@@ -3,14 +3,14 @@ import type { Appearance } from '@whop/elements'
 export const roasAppearance: Appearance = {
   theme: {
     appearance: 'dark',
-    accentColor: 'lime',
-    grayColor: 'sage',
+    accentColor: 'blue',
+    grayColor: 'slate',
     dangerColor: 'tomato',
     warningColor: 'amber',
-    successColor: 'grass',
-    infoColor: 'sky',
+    successColor: 'teal',
+    infoColor: 'blue',
   },
   variables: {
-    '--radius': '10px',
+    '--radius': '0.75rem',
   },
 }
