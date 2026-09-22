@@ -10,6 +10,7 @@ import {
   Websites,
 } from '@whop/elements-react'
 import type { CampaignCreatorElementOverlayHandle } from '@whop/elements/ads'
+import { ComponentIndex, ElementFrame, ElementGroup } from '../components/ElementFrame'
 import { whopAccountId } from '../config'
 
 type AdsPageProps = {
@@ -99,51 +100,80 @@ export const AdsPage = ({ accessToken }: AdsPageProps) => {
         </ul>
       </section>
 
+      <ComponentIndex
+        items={[
+          { id: 'CampaignCreatorElement', name: 'CampaignCreatorElement', namespace: 'ads' },
+          { id: 'ChartElement', name: 'ChartElement', namespace: 'ads' },
+          { id: 'TableElement', name: 'TableElement', namespace: 'ads' },
+          { id: 'BillingSetupElement', name: 'BillingSetupElement', namespace: 'ads' },
+          { id: 'PixelSetupElement', name: 'PixelSetupElement', namespace: 'websites' },
+        ]}
+      />
+
       {elementError ? <p className="banner warning">{elementError}</p> : null}
 
       <Ads accountId={whopAccountId} accessToken={accessToken}>
-        <section className="block">
-          <div className="block-head">
-            <h2>Campaigns</h2>
-            <NewCampaignButton onError={setElementError} />
-          </div>
-          <p className="hint">
-            New campaign opens the builder. Editing a row in the table opens the same builder on
-            that campaign.
-          </p>
-        </section>
+        <ElementGroup id="ads-group" title="Campaigns and reporting" namespace="ads">
+          <ElementFrame
+            id="CampaignCreatorElement"
+            name="CampaignCreatorElement"
+            namespace="ads"
+            summary="Opens the campaign builder as an overlay. Editing a row in the table opens the same builder on that campaign."
+          >
+            <div className="frame-actions">
+              <p className="hint">This element is not mounted inline. New campaign opens it over the page.</p>
+              <NewCampaignButton onError={setElementError} />
+            </div>
+          </ElementFrame>
 
-        <section className="block">
-          <h2>Reporting</h2>
           <Reporting>
-            <ChartElement className="embed chart" onError={handleElementError} />
-            <TableElement className="embed table" onError={handleElementError} />
+            <ElementFrame
+              id="ChartElement"
+              name="ChartElement"
+              namespace="ads"
+              summary="Plots spend, impressions, clicks, and conversions. It uses the same window as the table below."
+            >
+              <ChartElement className="embed chart" onError={handleElementError} />
+            </ElementFrame>
+            <ElementFrame
+              id="TableElement"
+              name="TableElement"
+              namespace="ads"
+              summary="Campaigns, ad groups, and ads. Pause, resume, duplicate, or delete from a row."
+            >
+              <TableElement className="embed table" onError={handleElementError} />
+            </ElementFrame>
           </Reporting>
-        </section>
 
-        <section className="block">
-          <h2>Billing</h2>
-          <p className="hint">Choose the card or balance that ad spend charges first.</p>
-          <BillingSetupElement className="embed billing" onError={handleElementError} />
-        </section>
+          <ElementFrame
+            id="BillingSetupElement"
+            name="BillingSetupElement"
+            namespace="ads"
+            summary="Chooses the card or balance that ad spend charges first."
+          >
+            <BillingSetupElement className="embed billing" onError={handleElementError} />
+          </ElementFrame>
+        </ElementGroup>
       </Ads>
 
       <Websites accountId={whopAccountId} accessToken={accessToken}>
-        <section className="block">
-          <h2>Conversion pixel</h2>
-          <p className="hint">
-            Paste the Whop pixel on the landing page, checkout, and thank-you page. This wizard
-            checks that it is installed.
-          </p>
-          <PixelSetupElement
-            className="embed pixel"
-            accountId={whopAccountId}
-            accessToken={accessToken}
-            showIntro={false}
-            showInviteDeveloper={false}
-            onError={handleElementError}
-          />
-        </section>
+        <ElementGroup id="websites-group" title="Conversion pixel" namespace="websites">
+          <ElementFrame
+            id="PixelSetupElement"
+            name="PixelSetupElement"
+            namespace="websites"
+            summary="Installs the Whop pixel on the landing page, checkout, and thank-you page, then checks that it is live."
+          >
+            <PixelSetupElement
+              className="embed pixel"
+              accountId={whopAccountId}
+              accessToken={accessToken}
+              showIntro={false}
+              showInviteDeveloper={false}
+              onError={handleElementError}
+            />
+          </ElementFrame>
+        </ElementGroup>
       </Websites>
     </div>
   )
