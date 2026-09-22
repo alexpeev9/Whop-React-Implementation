@@ -1,12 +1,14 @@
-import type { ReactNode } from 'react'
+import type { ChangeEvent, ReactNode } from 'react'
 
 export type ElementNamespace =
   | 'ads'
   | 'websites'
+  | 'tracking'
   | 'verifications'
   | 'dashboard'
   | 'wallet'
   | 'payments'
+  | 'checkout'
 
 type ElementFrameProps = {
   id: string
@@ -54,6 +56,42 @@ export const ElementGroup = ({ id, title, namespace, children }: ElementGroupPro
       </header>
       {children}
     </section>
+  )
+}
+
+type IdFieldProps = {
+  id: string
+  label: string
+  hint: string
+  placeholder: string
+  value: string
+  onChange: (value: string) => void
+}
+
+export const IdField = ({ id, label, hint, placeholder, value, onChange }: IdFieldProps) => {
+  const hintId = `${id}-hint`
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onChange(event.target.value)
+  }
+
+  return (
+    <div className="id-field">
+      <label htmlFor={id}>{label}</label>
+      <input
+        id={id}
+        name={id}
+        value={value}
+        placeholder={placeholder}
+        autoComplete="off"
+        spellCheck={false}
+        aria-describedby={hintId}
+        onChange={handleChange}
+      />
+      <p className="hint" id={hintId}>
+        {hint}
+      </p>
+    </div>
   )
 }
 

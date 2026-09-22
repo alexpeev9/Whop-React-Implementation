@@ -3,15 +3,21 @@ import {
   Ads,
   BillingSetupElement,
   ChartElement,
+  EventsElement,
+  PeopleElement,
+  PersonElement,
   PixelSetupElement,
   Reporting,
   TableElement,
+  Tracking,
   useAds,
   Websites,
+  WebsitesElement,
 } from '@whop/elements-react'
 import type { CampaignCreatorElementOverlayHandle } from '@whop/elements/ads'
-import { ComponentIndex, ElementFrame, ElementGroup } from '../components/ElementFrame'
+import { ComponentIndex, ElementFrame, ElementGroup, IdField } from '../components/ElementFrame'
 import { whopAccountId } from '../config'
+import { revealElement, useStoredId } from '../useStoredId'
 
 type AdsPageProps = {
   accessToken: string
@@ -55,6 +61,8 @@ export const AdsPage = ({ accessToken }: AdsPageProps) => {
     () => sessionStorage.getItem('roas.ads.announcement') === 'dismissed',
   )
   const [elementError, setElementError] = useState<string | null>(null)
+  const [personId, setPersonId] = useStoredId('roas.tracking.person')
+  const personReady = personId.trim().length > 0
 
   const handleDismiss = () => {
     sessionStorage.setItem('roas.ads.announcement', 'dismissed')
@@ -63,6 +71,11 @@ export const AdsPage = ({ accessToken }: AdsPageProps) => {
 
   const handleElementError = (error: { message: string }) => {
     setElementError(error.message)
+  }
+
+  const handlePersonOpened = (payload: { personId: string }) => {
+    setPersonId(payload.personId)
+    revealElement('PersonElement')
   }
 
   return (
@@ -106,7 +119,11 @@ export const AdsPage = ({ accessToken }: AdsPageProps) => {
           { id: 'ChartElement', name: 'ChartElement', namespace: 'ads' },
           { id: 'TableElement', name: 'TableElement', namespace: 'ads' },
           { id: 'BillingSetupElement', name: 'BillingSetupElement', namespace: 'ads' },
+          { id: 'WebsitesElement', name: 'WebsitesElement', namespace: 'websites' },
           { id: 'PixelSetupElement', name: 'PixelSetupElement', namespace: 'websites' },
+          { id: 'PeopleElement', name: 'PeopleElement', namespace: 'tracking' },
+          { id: 'EventsElement', name: 'EventsElement', namespace: 'tracking' },
+          { id: 'PersonElement', name: 'PersonElement', namespace: 'tracking' },
         ]}
       />
 
@@ -157,7 +174,15 @@ export const AdsPage = ({ accessToken }: AdsPageProps) => {
       </Ads>
 
       <Websites accountId={whopAccountId} accessToken={accessToken}>
-        <ElementGroup id="websites-group" title="Conversion pixel" namespace="websites">
+        <ElementGroup id="websites-group" title="Sites and conversion pixel" namespace="websites">
+          <ElementFrame
+            id="WebsitesElement"
+            name="WebsitesElement"
+            namespace="websites"
+            summary="Every whop.site and every domain the pixel reports, with visitors, page views, sales, and revenue."
+          >
+            <WebsitesElement className="embed table" onError={handleElementError} />
+          </ElementFrame>
           <ElementFrame
             id="PixelSetupElement"
             name="PixelSetupElement"
@@ -175,6 +200,52 @@ export const AdsPage = ({ accessToken }: AdsPageProps) => {
           </ElementFrame>
         </ElementGroup>
       </Websites>
+
+      <Tracking accountId={whopAccountId} accessToken={accessToken}>
+        <ElementGroup id="tracking-group" title="Audience" namespace="tracking">
+          <ElementFrame
+            id="PeopleElement"
+            name="PeopleElement"
+            namespace="tracking"
+            summary="Visitors and customers the pixel has seen. A row opens that person below."
+          >
+            <PeopleElement className="embed table" onPersonOpened={handlePersonOpened} onError={handleElementError} />
+          </ElementFrame>
+          <ElementFrame
+            id="EventsElement"
+            name="EventsElement"
+            namespace="tracking"
+            summary="Page views, leads, purchases, and custom pixel events. A person cell opens that person below."
+          >
+            <EventsElement className="embed table" onPersonOpened={handlePersonOpened} onError={handleElementError} />
+          </ElementFrame>
+          <ElementFrame
+            id="PersonElement"
+            name="PersonElement"
+            namespace="tracking"
+            summary="One person’s record. Needs a person id. A row above fills it, or paste a prsn_ id, user id, or email."
+          >
+            <IdField
+              id="person-id"
+              label="Person id"
+              placeholder="prsn_…"
+              hint="A prsn_ id, a Whop user id, or an email this account has seen."
+              value={personId}
+              onChange={setPersonId}
+            />
+            {personReady ? (
+              <PersonElement
+                key={personId.trim()}
+                className="embed table"
+                identifier={personId.trim()}
+                onError={handleElementError}
+              />
+            ) : (
+              <p className="hint">Enter a person id to mount PersonElement.</p>
+            )}
+          </ElementFrame>
+        </ElementGroup>
+      </Tracking>
     </div>
   )
 }

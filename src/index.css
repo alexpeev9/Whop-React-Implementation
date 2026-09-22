@@ -26,10 +26,12 @@
   --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
   --ns-ads: oklch(0.72 0.16 260);
   --ns-websites: oklch(0.78 0.14 165);
+  --ns-tracking: oklch(0.76 0.14 300);
   --ns-verifications: oklch(0.82 0.14 85);
   --ns-dashboard: oklch(0.78 0.12 210);
   --ns-wallet: oklch(0.8 0.14 145);
   --ns-payments: oklch(0.74 0.14 320);
+  --ns-checkout: oklch(0.78 0.15 55);
   font: 17px/1.45 var(--sans);
   color: var(--foreground);
   background:
@@ -164,10 +166,12 @@ h2 { font-size: 1.15rem; margin: 0; }
 
 .element-index a[data-namespace='ads'] { --ns: var(--ns-ads); }
 .element-index a[data-namespace='websites'] { --ns: var(--ns-websites); }
+.element-index a[data-namespace='tracking'] { --ns: var(--ns-tracking); }
 .element-index a[data-namespace='verifications'] { --ns: var(--ns-verifications); }
 .element-index a[data-namespace='dashboard'] { --ns: var(--ns-dashboard); }
 .element-index a[data-namespace='wallet'] { --ns: var(--ns-wallet); }
 .element-index a[data-namespace='payments'] { --ns: var(--ns-payments); }
+.element-index a[data-namespace='checkout'] { --ns: var(--ns-checkout); }
 
 .element-index a:hover { border-color: var(--border-strong); }
 
@@ -197,6 +201,8 @@ h2 { font-size: 1.15rem; margin: 0; }
 .element-group[data-namespace='ads'] { --ns: var(--ns-ads); }
 .element-frame[data-namespace='websites'],
 .element-group[data-namespace='websites'] { --ns: var(--ns-websites); }
+.element-frame[data-namespace='tracking'],
+.element-group[data-namespace='tracking'] { --ns: var(--ns-tracking); }
 .element-frame[data-namespace='verifications'],
 .element-group[data-namespace='verifications'] { --ns: var(--ns-verifications); }
 .element-frame[data-namespace='dashboard'],
@@ -205,6 +211,8 @@ h2 { font-size: 1.15rem; margin: 0; }
 .element-group[data-namespace='wallet'] { --ns: var(--ns-wallet); }
 .element-frame[data-namespace='payments'],
 .element-group[data-namespace='payments'] { --ns: var(--ns-payments); }
+.element-frame[data-namespace='checkout'],
+.element-group[data-namespace='checkout'] { --ns: var(--ns-checkout); }
 
 .element-group > .group-head h2 {
   color: var(--foreground);
@@ -326,8 +334,35 @@ nav a:focus-visible,
 .embed.chart { min-height: 360px; }
 .embed.table { min-height: 520px; }
 .embed.billing, .embed.short { min-height: 180px; }
-.embed.pixel, .embed.kyc { min-height: 640px; }
+.embed.pixel, .embed.kyc, .embed.checkout { min-height: 640px; }
+.embed.express, .embed.field { min-height: 120px; }
 .embed.brand { min-height: 88px; position: relative; z-index: 1; background: transparent; }
+
+.id-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.id-field label {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.id-field input {
+  font: inherit;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--foreground);
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.7rem;
+}
+
+.id-field input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
 
 .brand-lockup {
   position: relative;
