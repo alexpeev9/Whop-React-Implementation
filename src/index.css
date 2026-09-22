@@ -1,0 +1,197 @@
+:root {
+  color-scheme: dark;
+  --bg: #10140f;
+  --bg-2: #171d16;
+  --ink: #f3f6ee;
+  --muted: #a7b3a0;
+  --line: #2c3828;
+  --lime: #c6f54e;
+  --lime-ink: #142006;
+  --warning: #3a2a14;
+  --warning-ink: #f3d7a1;
+  --sans: 'Source Sans 3', 'Segoe UI', sans-serif;
+  --display: Syne, 'Source Sans 3', sans-serif;
+  font: 17px/1.45 var(--sans);
+  color: var(--ink);
+  background:
+    radial-gradient(900px 420px at 10% -10%, rgba(198, 245, 78, 0.12), transparent 60%),
+    var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+button, a { font: inherit; }
+
+h1, h2, .brand strong {
+  font-family: var(--display);
+  letter-spacing: -0.03em;
+}
+
+h1 { font-size: 2.4rem; line-height: 1.05; margin: 0.15rem 0 0; }
+h2 { font-size: 1.15rem; margin: 0; }
+
+.eyebrow {
+  margin: 0;
+  color: var(--lime);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.lede, .hint { color: var(--muted); max-width: 68ch; }
+.hint { margin: 0.35rem 0 0.8rem; }
+
+.login {
+  min-height: 100vh;
+  display: grid;
+  align-content: center;
+  gap: 0.8rem;
+  padding: 3rem 8vw;
+  max-width: 760px;
+}
+
+.shell { min-height: 100vh; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+  background: rgba(16, 20, 15, 0.9);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.brand, .session { display: flex; align-items: center; gap: 0.7rem; }
+.brand { margin-right: auto; }
+.brand span, .session span { display: block; color: var(--muted); font-size: 0.85rem; }
+.brand strong { display: block; }
+
+.mark {
+  width: 0.7rem;
+  height: 2rem;
+  border-radius: 99px;
+  background: var(--lime);
+}
+
+nav { display: flex; gap: 0.4rem; }
+
+nav a {
+  color: var(--ink);
+  text-decoration: none;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+nav a[aria-current='page'] {
+  background: var(--bg-2);
+  border-color: var(--line);
+}
+
+.page { padding: 1.5rem 1.25rem 4rem; display: grid; gap: 1.25rem; }
+.page-head { display: grid; gap: 0.45rem; }
+
+.payments-page {
+  background: linear-gradient(180deg, rgba(198, 245, 78, 0.05), transparent 220px);
+}
+
+.block {
+  display: grid;
+  gap: 0.7rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(23, 29, 22, 0.72);
+}
+
+.block-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+
+.help ul { margin: 0.4rem 0 0; padding-left: 1.1rem; color: var(--muted); }
+
+.banner {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: #1c2814;
+  border: 1px solid #314422;
+}
+
+.banner.warning, .page-error.banner {
+  background: var(--warning);
+  border-color: #6a4b22;
+  color: var(--warning-ink);
+}
+
+.page-error { margin: 1rem 1.25rem 0; }
+
+.primary, .text {
+  border: 0;
+  cursor: pointer;
+}
+
+.primary {
+  background: var(--lime);
+  color: var(--lime-ink);
+  border-radius: 999px;
+  padding: 0.7rem 1.1rem;
+  font-weight: 700;
+}
+
+.primary:disabled { opacity: 0.55; cursor: wait; }
+
+.text {
+  background: transparent;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.embed { width: 100%; min-height: 280px; }
+.embed iframe { width: 100%; min-height: inherit; border: 0; display: block; background: transparent; }
+.embed.chart { min-height: 360px; }
+.embed.table { min-height: 520px; }
+.embed.billing, .embed.short { min-height: 180px; }
+.embed.pixel, .embed.kyc { min-height: 640px; }
+.embed.brand { min-height: 88px; position: relative; z-index: 1; background: transparent; }
+
+.brand-lockup {
+  position: relative;
+  min-height: 140px;
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #0c100c;
+}
+
+.brand-behind {
+  position: absolute;
+  inset: auto 0 0.2rem;
+  margin: 0;
+  text-align: center;
+  font-family: var(--display);
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 0.85;
+  color: rgba(198, 245, 78, 0.22);
+  pointer-events: none;
+}
+
+@media (max-width: 800px) {
+  .topbar { flex-wrap: wrap; }
+  .session { margin-left: auto; }
+  h1 { font-size: 2rem; }
+}
