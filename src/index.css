@@ -1,22 +1,58 @@
+/* Theme axes. Every surface and accent below is derived from these four, so a
+   theme only restates the axes -- see the [data-theme] blocks. */
+:root {
+  --h: 260;
+  --bg-l: 0.17;
+  --acc-l: 0.66;
+  --acc-c: 0.18;
+}
+
+:root[data-theme='midnight'] {
+  --h: 268;
+  --bg-l: 0.13;
+  --acc-l: 0.58;
+  --acc-c: 0.15;
+}
+
+:root[data-theme='blue'] {
+  --h: 260;
+  --bg-l: 0.17;
+  --acc-l: 0.66;
+  --acc-c: 0.18;
+}
+
+:root[data-theme='purple'] {
+  --h: 305;
+  --bg-l: 0.16;
+  --acc-l: 0.68;
+  --acc-c: 0.17;
+}
+
 :root {
   color-scheme: dark;
   --radius: 0.75rem;
-  --background: oklch(0.17 0.025 260);
+  --background: oklch(var(--bg-l) 0.025 var(--h));
   --foreground: oklch(0.97 0.005 250);
-  --surface: oklch(0.21 0.028 260);
-  --surface-elevated: oklch(0.235 0.03 262);
-  --card: oklch(0.21 0.028 260);
-  --primary: oklch(0.66 0.18 260);
+  --surface: oklch(calc(var(--bg-l) + 0.04) 0.028 var(--h));
+  --surface-elevated: oklch(calc(var(--bg-l) + 0.065) 0.03 var(--h));
+  --card: oklch(calc(var(--bg-l) + 0.04) 0.028 var(--h));
+  --primary: oklch(var(--acc-l) var(--acc-c) var(--h));
   --primary-foreground: oklch(0.98 0.005 250);
-  --secondary: oklch(0.26 0.03 260);
-  --muted: oklch(0.24 0.025 260);
-  --muted-foreground: oklch(0.65 0.025 260);
+  --secondary: oklch(calc(var(--bg-l) + 0.09) 0.03 var(--h));
+  --muted: oklch(calc(var(--bg-l) + 0.07) 0.025 var(--h));
+  --muted-foreground: oklch(0.65 0.025 var(--h));
   --success: oklch(0.78 0.15 165);
   --warning: oklch(0.79 0.15 75);
   --danger: oklch(0.65 0.22 25);
-  --border: oklch(0.27 0.025 260);
-  --border-strong: oklch(0.32 0.03 260);
-  --ring: oklch(0.66 0.18 260);
+  --border: oklch(calc(var(--bg-l) + 0.1) 0.025 var(--h));
+  --border-strong: oklch(calc(var(--bg-l) + 0.15) 0.03 var(--h));
+  --ring: oklch(var(--acc-l) var(--acc-c) var(--h));
+  --accent-glow: oklch(var(--acc-l) var(--acc-c) var(--h) / 0.14);
+  --accent-wash: oklch(var(--acc-l) var(--acc-c) var(--h) / 0.08);
+  --accent-ghost: oklch(var(--acc-l) var(--acc-c) var(--h) / 0.22);
+  --well: oklch(calc(var(--bg-l) - 0.03) 0.02 var(--h));
+  --scroll-thumb: oklch(0.45 0.015 var(--h));
+  --scroll-thumb-hover: oklch(0.55 0.02 var(--h));
   --bg: var(--background);
   --bg-2: var(--surface);
   --ink: var(--foreground);
@@ -24,7 +60,7 @@
   --sans: 'Source Sans 3', 'Segoe UI', sans-serif;
   --display: Syne, 'Source Sans 3', sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
-  --ns-ads: oklch(0.72 0.16 260);
+  --ns-ads: oklch(calc(var(--acc-l) + 0.06) 0.16 var(--h));
   --ns-websites: oklch(0.78 0.14 165);
   --ns-verifications: oklch(0.82 0.14 85);
   --ns-dashboard: oklch(0.78 0.12 210);
@@ -33,7 +69,7 @@
   font: 17px/1.45 var(--sans);
   color: var(--foreground);
   background:
-    radial-gradient(900px 420px at 10% -10%, oklch(0.66 0.18 260 / 0.14), transparent 60%),
+    radial-gradient(900px 420px at 10% -10%, var(--accent-glow), transparent 60%),
     var(--background);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -43,16 +79,16 @@
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: oklch(0.45 0.015 260) transparent;
+  scrollbar-color: var(--scroll-thumb) transparent;
 }
 
 *::-webkit-scrollbar { width: 8px; height: 8px; }
 *::-webkit-scrollbar-track { background: transparent; }
 *::-webkit-scrollbar-thumb {
-  background: oklch(0.45 0.015 260);
+  background: var(--scroll-thumb);
   border-radius: 9999px;
 }
-*::-webkit-scrollbar-thumb:hover { background: oklch(0.55 0.02 260); }
+*::-webkit-scrollbar-thumb:hover { background: var(--scroll-thumb-hover); }
 
 body {
   margin: 0;
@@ -131,11 +167,63 @@ h2 { font-size: 1.15rem; margin: 0; }
   border-color: var(--border);
 }
 
+.theme-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.5rem;
+  padding: 0.2rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.theme-switch button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted-foreground);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.theme-switch button:hover { color: var(--ink); }
+
+.theme-switch button[aria-checked='true'] {
+  background: var(--surface-elevated);
+  border-color: var(--border-strong);
+  color: var(--ink);
+}
+
+.theme-switch .swatch {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px oklch(1 0 0 / 0.18) inset;
+}
+
+/* The labels are the first thing to go when the topbar gets tight. */
+@media (max-width: 1080px) {
+  .theme-switch-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 .page { padding: 1.5rem 1.25rem 4rem; display: grid; gap: 1.25rem; }
 .page-head { display: grid; gap: 0.45rem; }
 
 .payments-page {
-  background: linear-gradient(180deg, oklch(0.66 0.18 260 / 0.08), transparent 220px);
+  background: linear-gradient(180deg, var(--accent-wash), transparent 220px);
 }
 
 .element-index {
@@ -336,7 +424,7 @@ nav a:focus-visible,
   align-items: end;
   overflow: hidden;
   border-radius: var(--radius);
-  background: oklch(0.14 0.02 260);
+  background: var(--well);
 }
 
 .brand-behind {
@@ -347,7 +435,7 @@ nav a:focus-visible,
   font-family: var(--display);
   font-size: clamp(3rem, 8vw, 6rem);
   line-height: 0.85;
-  color: oklch(0.66 0.18 260 / 0.22);
+  color: var(--accent-ghost);
   pointer-events: none;
 }
 

@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { WhopElements } from '@whop/elements-react'
 import { loadWhop } from '@whop/elements'
 import { consumeOAuthCallback, logoutWhop, readSession, type WhopSession } from './auth'
-import { roasAppearance } from './appearance'
+import { appearanceFor } from './appearance'
 import { Shell } from './components/Shell'
 import { fetchAccountTitle, getElementToken } from './elementToken'
+import { readStoredTheme, storeTheme, type ThemeId } from './theme'
 import { AdsPage } from './pages/AdsPage'
 import { LoginPage } from './pages/LoginPage'
 import { PaymentsPage } from './pages/PaymentsPage'
@@ -28,6 +29,13 @@ const App = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null)
   const [tokenError, setTokenError] = useState<string | null>(null)
   const [accountTitle, setAccountTitle] = useState('Whop account')
+  const [theme, setTheme] = useState<ThemeId>(readStoredTheme)
+  const appearance = useMemo(() => appearanceFor(theme), [theme])
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    storeTheme(theme)
+  }, [theme])
 
   useEffect(() => {
     const handlePop = () => setPath(window.location.pathname)
@@ -103,13 +111,15 @@ const App = () => {
   const page = path === '/payments' ? 'payments' : 'ads'
 
   return (
-    <WhopElements elements={elements} appearance={roasAppearance}>
+    <WhopElements elements={elements} appearance={appearance}>
       <Shell
         path={page === 'payments' ? '/payments' : '/ads'}
         user={session.user}
         accountTitle={accountTitle}
         onNavigate={handleNavigate}
         onLogout={handleLogout}
+        theme={theme}
+        onThemeChange={setTheme}
       >
         {tokenError ? <p className="banner warning page-error">{tokenError}</p> : null}
         {!accessToken && !tokenError ? <p className="hint page-error">Opening Whop…</p> : null}

@@ -1,11 +1,15 @@
 import type { ReactNode } from 'react'
 import { userLabel, type WhopUser } from '../auth'
+import type { ThemeId } from '../theme'
+import { ThemeSwitch } from './ThemeSwitch'
 
 type ShellProps = {
   path: string
   user: WhopUser
   accountTitle: string
   onNavigate: (path: string) => void
+  theme: ThemeId
+  onThemeChange: (theme: ThemeId) => void
   onLogout: () => void
   children: ReactNode
 }
@@ -15,7 +19,16 @@ const links = [
   { href: '/payments', label: 'ROAS Payments' },
 ]
 
-export const Shell = ({ path, user, accountTitle, onNavigate, onLogout, children }: ShellProps) => {
+export const Shell = ({
+  path,
+  user,
+  accountTitle,
+  onNavigate,
+  onLogout,
+  theme,
+  onThemeChange,
+  children,
+}: ShellProps) => {
   return (
     <div className="shell">
       <header className="topbar">
@@ -40,6 +53,7 @@ export const Shell = ({ path, user, accountTitle, onNavigate, onLogout, children
               {link.label}
             </a>
           ))}
+          <ThemeSwitch theme={theme} onThemeChange={onThemeChange} />
         </nav>
         <div className="session">
           <span>{userLabel(user)}</span>
